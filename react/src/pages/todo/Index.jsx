@@ -129,7 +129,7 @@ function Todo() {
                                                     </span>
                                             </td>
                                             <td className="bg-white text-sm space-x-2 whitespace-nowrap">
-                                                <Link to="/todo/edit">
+                                                <Link to={`/todo/edit/${123}`}>
                                                     <PrimaryButton>
                                                       Edit
                                                     </PrimaryButton>

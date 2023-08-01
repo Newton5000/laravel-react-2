@@ -34,7 +34,7 @@ const Profile = () => {
 
                                     <TextInput
                                         id="name"
-                                        classes="mt-1 block w-full"
+                                        className="mt-1 block w-full"
                                         required
                                         isFocused
                                         autoComplete="name"
@@ -49,7 +49,7 @@ const Profile = () => {
                                     <TextInput
                                         id="email"
                                         type="email"
-                                        classes="mt-1 block w-full"
+                                        className="mt-1 block w-full"
                                         required
                                         autoComplete="username"
                                     />

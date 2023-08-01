@@ -3,8 +3,26 @@ import InputLabel from "../../components/InputLabel.jsx";
 import TextInput from "../../components/TextInput.jsx";
 import InputError from "../../components/InputError.jsx";
 import PrimaryButton from "../../components/PrimaryButton.jsx";
+import {useState} from "react";
+import SelectInput from "../../components/SelectInput.jsx";
 
-const CreateToto = () => {
+const CreateTodo = () => {
+    const [todo , setTodo] = useState({
+        name: "",
+        category: "",
+        status: "",
+    })
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setTodo((prevProps) => ({
+            ...prevProps,
+                [name]: value
+        }))
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault()
+            console.log(todo)
+    }
     return (
         <>
             <AppLayout>
@@ -27,16 +45,19 @@ const CreateToto = () => {
                                 </p>
                             </header>
 
-                            <form className="mt-6 space-y-6">
+                            <form onSubmit={handleSubmit} className="mt-6 space-y-6">
                                 <div>
                                     <InputLabel htmlFor="name" value="Name" />
 
                                     <TextInput
                                         id="name"
-                                        classes="mt-1 block w-full"
+                                        className="mt-1 block w-full"
                                         required
                                         isFocused
                                         autoComplete="name"
+                                        value={todo.name}
+                                        name="name"
+                                        onChange={handleInputChange}
                                     />
 
                                     <InputError className="mt-2" message="" />
@@ -45,13 +66,15 @@ const CreateToto = () => {
                                 <div>
                                     <InputLabel htmlFor="category" value="Category" />
 
-                                    <TextInput
-                                        id="category"
-                                        classes="mt-1 block w-full"
-                                        required
-                                        isFocused
-                                        autoComplete="category"
-                                    />
+                                    <SelectInput className="bg-white mt-1 block w-full"
+                                                 id="category"
+                                                 required
+                                                 autoComplete="status"
+                                                 value={todo.category}
+                                                 name="category"
+                                                 options={['home','school','work']}
+                                                 onChange={handleInputChange}>
+                                    </SelectInput>
 
                                     <InputError className="mt-2" message="" />
                                 </div>
@@ -59,19 +82,21 @@ const CreateToto = () => {
                                 <div>
                                     <InputLabel htmlFor="status" value="Status" />
 
-                                    <TextInput
-                                        id="status"
-                                        classes="mt-1 block w-full"
-                                        required
-                                        isFocused
-                                        autoComplete="status"
-                                    />
+                                    <SelectInput className="bg-white mt-1 block w-full"
+                                                 id="status"
+                                                 required
+                                                 autoComplete="status"
+                                                 value={todo.status}
+                                                 name="status"
+                                                 options={['pending','done','cancelled']}
+                                                 onChange={handleInputChange}>
+                                    </SelectInput>
 
                                     <InputError className="mt-2" message="" />
                                 </div>
 
                                 <div className="flex items-center gap-4">
-                                    <PrimaryButton type="button">Save</PrimaryButton>
+                                    <PrimaryButton type="submit">Save</PrimaryButton>
 
                                 </div>
                             </form>
@@ -84,4 +109,4 @@ const CreateToto = () => {
         </>
     )
 }
-export  default CreateToto
+export  default CreateTodo

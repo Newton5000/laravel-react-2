@@ -16,7 +16,7 @@ function Register() {
                        <TextInput
                            id="name"
                            type="text"
-                           classes="my-1 block w-full"
+                           className="my-1 block w-full"
                            required
                            autofocus
                            autocomplete="name"
@@ -31,7 +31,7 @@ function Register() {
                        <TextInput
                            id="email"
                            type="email"
-                           classes="my-1 block w-full"
+                           className="my-1 block w-full"
                            required
                            autofocus
                            autocomplete="email"
@@ -46,7 +46,7 @@ function Register() {
                        <TextInput
                            id="password"
                            type="password"
-                           classes="my-1 block w-full"
+                           className="my-1 block w-full"
                            required
                            autofocus
                            autocomplete="username"
