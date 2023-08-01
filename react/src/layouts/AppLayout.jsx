@@ -13,6 +13,7 @@ function AppLayout({ children }) {
     const splitLocation = pathname.split("/")
 
     const handleLogout = () => {
+        if(!confirm('are you sure you want to logout ?')) return
         console.log("logging out")
     }
 
