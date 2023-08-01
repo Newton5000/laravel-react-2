@@ -38,8 +38,8 @@ function AppLayout({ children }) {
                                         </NavLink>
                                     </div>
                                     <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                        <NavLink to="/home2" active={ splitLocation[1] === "home2" ? "active" : "" }>
-                                            Home 2
+                                        <NavLink to="/todo" active={ splitLocation[1] === "todo" ? "active" : "" }>
+                                            Todo
                                         </NavLink>
                                     </div>
                                     <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
@@ -78,7 +78,7 @@ function AppLayout({ children }) {
 
                                             <Dropdown.Content>
                                                 <Dropdown.Link to={"/profile"}>Profile</Dropdown.Link>
-                                                <Dropdown.Link to={"/logout"} >
+                                                <Dropdown.Link>
                                                     Log Out
                                                 </Dropdown.Link>
                                             </Dropdown.Content>
