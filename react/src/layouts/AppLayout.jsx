@@ -12,6 +12,10 @@ function AppLayout({ children }) {
 
     const splitLocation = pathname.split("/")
 
+    const handleLogout = () => {
+        console.log("logging out")
+    }
+
     return (
         <>
             <div>
@@ -78,7 +82,7 @@ function AppLayout({ children }) {
 
                                             <Dropdown.Content>
                                                 <Dropdown.Link to={"/profile"}>Profile</Dropdown.Link>
-                                                <Dropdown.Link>
+                                                <Dropdown.Link onClick={handleLogout}>
                                                     Log Out
                                                 </Dropdown.Link>
                                             </Dropdown.Content>

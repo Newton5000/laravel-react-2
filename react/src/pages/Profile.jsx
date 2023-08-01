@@ -3,8 +3,24 @@ import InputLabel from "../components/InputLabel.jsx";
 import TextInput from "../components/TextInput.jsx";
 import InputError from "../components/InputError.jsx";
 import PrimaryButton from "../components/PrimaryButton.jsx";
+import {useState} from "react";
 
 const Profile = () => {
+    const [user , setUser] = useState({
+        name: "",
+        email: "",
+    })
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUser((prevProps) => ({
+            ...prevProps,
+            [name]: value
+        }))
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log(user)
+    }
     return (
         <>
             <AppLayout>
@@ -28,7 +44,7 @@ const Profile = () => {
                                 </p>
                             </header>
 
-                            <form className="mt-6 space-y-6">
+                            <form onSubmit={handleSubmit} className="mt-6 space-y-6">
                                 <div>
                                     <InputLabel htmlFor="name" value="Name" />
 
@@ -38,6 +54,9 @@ const Profile = () => {
                                         required
                                         isFocused
                                         autoComplete="name"
+                                        name="name"
+                                        value={user.name}
+                                        onChange={handleInputChange}
                                     />
 
                                     <InputError className="mt-2" message="" />
@@ -52,13 +71,16 @@ const Profile = () => {
                                         className="mt-1 block w-full"
                                         required
                                         autoComplete="username"
+                                        name="email"
+                                        value={user.email}
+                                        onChange={handleInputChange}
                                     />
 
                                     <InputError className="mt-2" message="" />
                                 </div>
 
                                 <div className="flex items-center gap-4">
-                                    <PrimaryButton type="button">Save</PrimaryButton>
+                                    <PrimaryButton type="submit">Save</PrimaryButton>
 
                                 </div>
                             </form>

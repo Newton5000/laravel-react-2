@@ -4,7 +4,7 @@ import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Admin from "./pages/Admin.jsx";
-import PageNotFound from "./pages/PageNotFound.jsx";
+import ErrorPage from "./pages/ErrorPage.jsx";
 import Profile from "./pages/Profile.jsx";
 import Todo from "./pages/todo/Index.jsx";
 import EditTodo from "./pages/todo/Edit.jsx";
@@ -23,7 +23,7 @@ function App() {
             <Route path="/todo/create" element={<CreateTodo />} />
             <Route path="/todo/edit/:id" element={<EditTodo />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="*" element={<PageNotFound />} />
+            <Route path="*" element={<ErrorPage status='404' />} />
         </Routes>
     </>
   )
