@@ -3,12 +3,28 @@ import InputError from "../components/InputError.jsx";
 import InputLabel from "../components/InputLable.jsx";
 import TextInput from "../components/TextInput.jsx";
 import PrimaryButton from "../components/PrimaryButton.jsx";
+import {useState} from "react";
 
 function Login() {
+    const [user , setUser] = useState({
+        email: "",
+        password: "",
+    })
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUser((prevProps) => ({
+            ...prevProps,
+            [name]: value
+        }))
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log(user)
+    }
     return (
         <>
             <GuestLayout>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className="mt-4">
                         <InputLabel value="Email" />
 
@@ -17,8 +33,11 @@ function Login() {
                             type="email"
                             className="my-1 block w-full"
                             required
-                            autofocus
-                            autocomplete="email"
+                            autoFocus
+                            autoComplete="email"
+                            value={user.email}
+                            name="email"
+                            onChange={handleInputChange}
                         />
 
                         <InputError className="my-1" message="" />
@@ -32,15 +51,17 @@ function Login() {
                             type="password"
                             className="my-1 block w-full"
                             required
-                            autofocus
-                            autocomplete="password"
+                            autoComplete="password"
+                            value={user.password}
+                            name="password"
+                            onChange={handleInputChange}
                         />
 
                         <InputError className="my-1" message="" />
                     </div>
 
                     <div className="flex items-center justify-end mt-4">
-                        <PrimaryButton type="button" classes="ml-4" >
+                        <PrimaryButton type="submit" classes="ml-4" >
                             Login
                         </PrimaryButton>
                     </div>

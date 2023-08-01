@@ -3,12 +3,29 @@ import InputLabel from "../components/InputLable.jsx";
 import TextInput from "../components/TextInput.jsx";
 import InputError from "../components/InputError.jsx";
 import PrimaryButton from "../components/PrimaryButton.jsx";
+import {useState} from "react";
 
 function Register() {
+    const [user , setUser] = useState({
+        name: "",
+        email: "",
+        password: "",
+    })
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUser((prevProps) => ({
+            ...prevProps,
+            [name]: value
+        }))
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log(user)
+    }
     return (
        <>
            <GuestLayout>
-               <form>
+               <form onSubmit={handleSubmit}>
 
                    <div className="mt-4">
                        <InputLabel value="Name" />
@@ -18,8 +35,11 @@ function Register() {
                            type="text"
                            className="my-1 block w-full"
                            required
-                           autofocus
-                           autocomplete="name"
+                           autoFocus
+                           autoComplete="name"
+                           value={user.name}
+                           name="name"
+                           onChange={handleInputChange}
                        />
 
                        <InputError className="my-1" message="" />
@@ -33,8 +53,10 @@ function Register() {
                            type="email"
                            className="my-1 block w-full"
                            required
-                           autofocus
-                           autocomplete="email"
+                           autoComplete="email"
+                           value={user.email}
+                           name="email"
+                           onChange={handleInputChange}
                        />
 
                        <InputError className="my-1" message="" />
@@ -48,8 +70,10 @@ function Register() {
                            type="password"
                            className="my-1 block w-full"
                            required
-                           autofocus
-                           autocomplete="username"
+                           autoComplete="passowrd"
+                           value={user.password}
+                           name="password"
+                           onChange={handleInputChange}
                        />
 
                        <InputError className="my-1" message="" />

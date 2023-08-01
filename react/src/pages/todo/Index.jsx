@@ -15,7 +15,7 @@ function Todo() {
             ...prevProps,
             [name]: value
         }))
-        setSearchParams(params) // real time update & debounce
+        setSearchParams({ ...params, [name]: value }) // *real time update & debounce
     }
     return (
         <>
@@ -28,7 +28,6 @@ function Todo() {
                         <h2 className="font-semibold text-xl text-gray-800 leading-tight">Todo List</h2>
                     </div>
                 </header>
-
 
                 <div className="antialiased">
                     <div className="container mx-auto px-4 sm:px-8">
