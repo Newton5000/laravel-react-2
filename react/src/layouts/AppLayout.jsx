@@ -2,7 +2,7 @@ import {Link, useLocation} from "react-router-dom";
 import {useState} from "react";
 import ApplicationLogo from "../components/ApplicationLogo.jsx";
 import NavLink from "../components/NavLink.jsx";
-import {padStart} from "lodash/string.js";
+import Dropdown from "../components/Dropdown.jsx";
 function AppLayout({ children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false)
 
@@ -33,27 +33,32 @@ function AppLayout({ children }) {
 
                                     {/*Navigation Links*/}
                                     <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                        <NavLink text="Home" to="/home" active={ splitLocation[1] === "home" ? "active" : "" } />
+                                        <NavLink to="/home" active={ splitLocation[1] === "home" ? "active" : "" }>
+                                            Home
+                                        </NavLink>
                                     </div>
                                     <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                        <NavLink text="Home2" to="/home2" active={ splitLocation[1] === "home2" ? "active" : "" } />
+                                        <NavLink to="/home2" active={ splitLocation[1] === "home2" ? "active" : "" }>
+                                            Home 2
+                                        </NavLink>
                                     </div>
                                     <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                        <NavLink text="Admin" to="/admin" active={ splitLocation[1] === "admin" ? "active" : "" } />
+                                        <NavLink to="/admin" active={ splitLocation[1] === "admin" ? "active" : "" }>
+                                            Admin
+                                        </NavLink>
                                     </div>
                                 </div>
 
-
                                 <div className="hidden sm:flex sm:items-center sm:ml-6">
-                                    {/*Settings Dropdown */}
                                     <div className="ml-3 relative">
-                                        <div className="text-right" width="48">
-                                            <span className="inline-flex rounded-md">
+                                        <Dropdown>
+                                            <Dropdown.Trigger>
+                                        <span className="inline-flex rounded-md">
                                             <button
                                                 type="button"
                                                 className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
-                                              Levinl
+                                                leivll
 
                                                 <svg
                                                     className="ml-2 -mr-0.5 h-4 w-4"
@@ -69,7 +74,15 @@ function AppLayout({ children }) {
                                                 </svg>
                                             </button>
                                         </span>
-                                        </div>
+                                            </Dropdown.Trigger>
+
+                                            <Dropdown.Content>
+                                                <Dropdown.Link to={"/profile"}>Profile</Dropdown.Link>
+                                                <Dropdown.Link to={"/logout"} >
+                                                    Log Out
+                                                </Dropdown.Link>
+                                            </Dropdown.Content>
+                                        </Dropdown>
                                     </div>
                                 </div>
                             </div>

@@ -56,7 +56,7 @@ function Register() {
                    </div>
 
                    <div className="flex items-center justify-end mt-4">
-                       <PrimaryButton type="submit" classes="ml-4" text={"Register"} >Submit</PrimaryButton>
+                       <PrimaryButton type="submit" classes="ml-4">Submit</PrimaryButton>
                    </div>
                </form>
            </GuestLayout>

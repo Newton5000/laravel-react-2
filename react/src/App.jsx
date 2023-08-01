@@ -5,6 +5,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Admin from "./pages/Admin.jsx";
 import HomeTwo from "./pages/Home2.jsx";
+import PageNotFound from "./pages/PageNotFound.jsx";
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/home2" element={<HomeTwo />} />
+            <Route path="*" element={<PageNotFound />} />
         </Routes>
     </>
   )

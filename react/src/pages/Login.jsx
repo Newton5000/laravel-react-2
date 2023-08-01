@@ -40,7 +40,9 @@ function Login() {
                     </div>
 
                     <div className="flex items-center justify-end mt-4">
-                        <PrimaryButton type="button" classes="ml-4" text={"Log in"} />
+                        <PrimaryButton type="button" classes="ml-4" >
+                            Login
+                        </PrimaryButton>
                     </div>
                 </form>
             </GuestLayout>
