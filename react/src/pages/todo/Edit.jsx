@@ -42,10 +42,6 @@ const EditTodo = () => {
 
                             <header>
                                 <h2 className="text-lg font-medium text-gray-900">Todo Information</h2>
-
-                                <p className="mt-1 text-sm text-gray-600">
-                                    Fill in the form to create new todo item.
-                                </p>
                             </header>
 
                             <form onSubmit={handleSubmit} className="mt-6 space-y-6">

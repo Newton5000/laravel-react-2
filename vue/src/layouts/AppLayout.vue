@@ -8,6 +8,11 @@ import ResponsiveNavLink from '@/components/ResponsiveNavLink.vue';
 import { RouterLink } from 'vue-router';
 
 const showingNavigationDropdown = ref(false);
+
+const handleLogout = () => {
+    if(!confirm('are you sure you want to logout ?')) return
+    console.log("logging out")
+}
 </script>
 
 <template>
@@ -27,17 +32,17 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink to="/home">
+                                <NavLink to="/home" :active="$route.path === '/home'">
                                     Home
                                 </NavLink>
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink to="/todo">
+                                <NavLink to="/todo" :active="$route.path === '/todo' || $route.path === '/todo/create' || $route.name === 'todo.edit'"> <!-- inconsistent -->
                                     Todo
                                 </NavLink>
                             </div>
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink to="/admin" >
+                                <NavLink to="/admin" :active="$route.path === '/admin'">
                                     Admin
                                 </NavLink>
                             </div>
@@ -73,7 +78,7 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <DropdownLink to="/profile"> Profile </DropdownLink>
-                                        <DropdownLink to="/logout">
+                                        <DropdownLink to="" @click="handleLogout()">
                                             Log Out
                                         </DropdownLink>
                                     </template>
@@ -136,7 +141,7 @@ const showingNavigationDropdown = ref(false);
 
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink to="/profile"> Profile </ResponsiveNavLink>
-                            <ResponsiveNavLink to="/logout">
+                            <ResponsiveNavLink @click="handleLogout()" to="">
                                 Log Out
                             </ResponsiveNavLink>
                         </div>
