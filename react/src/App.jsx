@@ -19,10 +19,10 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/todo" element={<Todo />} />
             <Route path="/todo/create" element={<CreateTodo />} />
             <Route path="/todo/edit/:id" element={<EditTodo />} />
-            <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<ErrorPage status='404' />} />
         </Routes>
     </>
