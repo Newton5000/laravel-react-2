@@ -4,6 +4,7 @@ import InputLabel from "../components/InputLable.jsx";
 import TextInput from "../components/TextInput.jsx";
 import PrimaryButton from "../components/PrimaryButton.jsx";
 import {useState} from "react";
+import {Link} from "react-router-dom";
 
 function Login() {
     const [user , setUser] = useState({
@@ -61,10 +62,19 @@ function Login() {
                     </div>
 
                     <div className="flex items-center justify-end mt-4">
-                        <PrimaryButton type="submit" classes="ml-4" >
-                            Login
-                        </PrimaryButton>
-                    </div>
+                        <Link
+                            to="/register"
+                            className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            Don't have an account?
+                        </Link>
+
+
+                        <PrimaryButton className="ml-4">
+                        Log in
+                    </PrimaryButton>
+                </div>
+
                 </form>
             </GuestLayout>
         </>

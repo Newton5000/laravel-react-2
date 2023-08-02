@@ -22,7 +22,7 @@ const submit = () => {
 <template>
     <GuestLayout>
         <form @submit.prevent="submit">
-            <div>
+            <div class="mt-4">
                 <InputLabel for="name" value="Name" />
 
                 <TextInput
@@ -35,7 +35,7 @@ const submit = () => {
                     autocomplete="name"
                 />
 
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InputError class="mt-2" :message="form.name" />
             </div>
 
             <div class="mt-4">
@@ -50,7 +50,7 @@ const submit = () => {
                     autocomplete="username"
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError class="mt-2" :message="form.email" />
             </div>
 
             <div class="mt-4">
@@ -65,7 +65,7 @@ const submit = () => {
                     autocomplete="new-password"
                 />
 
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InputError class="mt-2" :message="form.password" />
             </div>
 
             <div class="mt-4">
@@ -80,12 +80,12 @@ const submit = () => {
                     autocomplete="new-password"
                 />
 
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
+                <InputError class="mt-2" :message="form.password_confirmation" />
             </div>
 
             <div class="flex items-center justify-end mt-4">
                 <RouterLink
-                    :href="route('login')"
+                    to="/login"
                     class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                     Already registered?
