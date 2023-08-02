@@ -7,6 +7,9 @@ import PrimaryButton from '@/components/PrimaryButton.vue';
 import TextInput from '@/components/TextInput.vue';
 import {RouterLink} from 'vue-router'
 import {ref} from "vue";
+import axios from "axios";
+
+axios.defaults.withCredentials = true
 
 defineProps({
     canResetPassword: {
@@ -18,21 +21,43 @@ defineProps({
 });
 
 const form = ref({
-    email: '',
-    password: '',
+    email: 'qybulame@mailinator.com',
+    password: 'jhugwdy7u7834',
     remember: false,
 });
 
-const submit = () => {
-   //
+const user = ref({})
+
+const pageErrors = ref({})
+
+const form_is_processing = ref(false)
+
+const submit = async () => {
+
+    await axios.get(`${import.meta.env.VITE_PUBLIC_API_URL}/sanctum/csrf-cookie`).catch(e => e)
+
+    await axios.post(`${import.meta.env.VITE_PUBLIC_API_URL}/login`,{
+        email: form.value.email,
+        password: form.value.password,
+        remember: form.value.remember,
+    })
+        .catch((error) => {
+        pageErrors.value = error.response.data ?? pageErrors.value
+    })
+
+    let { data } = await axios.get(`${import.meta.env.VITE_PUBLIC_API_URL}/api/user`).catch(e => e)
+
+    user.value = data
 };
 </script>
 
 <template>
     <GuestLayout>
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
+            {{ status}}
         </div>
+
+        <pre>{{ user }}</pre>
 
         <form @submit.prevent="submit">
             <div class="mt-4">
@@ -48,7 +73,13 @@ const submit = () => {
                     autocomplete="username"
                 />
 
-                <InputError class="mt-2" :message="form.email" />
+                <span v-if="Object.keys(pageErrors).length > 0">
+                    <span v-if="pageErrors.errors">
+                         <span v-if="pageErrors.errors.email">
+                        <InputError v-for="error in pageErrors.errors.email" class="mt-2" :message="error"/>
+                    </span>
+                    </span>
+                </span>
             </div>
 
             <div class="mt-4">
@@ -59,11 +90,17 @@ const submit = () => {
                     type="password"
                     class="mt-1 block w-full"
                     v-model="form.password"
-                    required
                     autocomplete="current-password"
+                    required
                 />
 
-                <InputError class="mt-2" :message="form.password" />
+                <span v-if="Object.keys(pageErrors).length > 0">
+                    <span v-if="pageErrors.errors">
+                         <span v-if="pageErrors.errors.password">
+                        <InputError v-for="error in pageErrors.errors.password" class="mt-2" :message="error"/>
+                    </span>
+                    </span>
+                </span>
             </div>
 
             <div class="flex items-center justify-end mt-4">
@@ -75,7 +112,7 @@ const submit = () => {
                 </RouterLink>
 
 
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form_is_processing }" :disabled="form_is_processing">
                     Log in
                 </PrimaryButton>
             </div>
