@@ -5,28 +5,68 @@ import InputError from "../components/InputError.jsx";
 import PrimaryButton from "../components/PrimaryButton.jsx";
 import {useState} from "react";
 import {Link} from "react-router-dom";
+import axios from "axios";
 
 function Register() {
-    const [user , setUser] = useState({
+
+    axios.defaults.withCredentials = true
+
+    const [user , setUser] = useState({})
+
+    const [pageErrors , setPageErrors] = useState({})
+
+    const [serverError , setServerError] = useState("")
+
+    const [form , setForm] = useState({
         name: "",
         email: "",
         password: "",
+        password_confirmation: "",
     })
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setUser((prevProps) => ({
+        setForm((prevProps) => ({
             ...prevProps,
             [name]: value
         }))
     }
-    const handleSubmit = (e) => {
+    const submit = async (e) => {
         e.preventDefault()
-        console.log(user)
+        let cookie = await axios.get(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`).catch((e) => {
+            setServerError("something went wrong")
+        })
+
+        let register
+        if (cookie) {
+            register = await axios.post(`${import.meta.env.VITE_API_URL}/register`, {
+                email: form.email,
+                password: form.password,
+                password_confirmation: form.password_confirmation,
+                name: form.name,
+            })
+                .catch((error) => {
+                    setPageErrors(error.response.data)
+                })
+        }
+
+        if (register) {
+            let {data} = await axios.get(`${import.meta.env.VITE_API_URL}/api/user`).catch((e) => {
+                setServerError("something went wrong")
+            })
+            setUser(data)
+        }
     }
     return (
        <>
            <GuestLayout>
-               <form onSubmit={handleSubmit}>
+               { user.name }
+               { user.id }
+               { user.email }
+               <div className="mb-4 font-medium text-sm text-red-600">
+                   { serverError }
+               </div>
+
+               <form onSubmit={submit}>
 
                    <div className="mt-4">
                        <InputLabel value="Name" />
@@ -35,15 +75,25 @@ function Register() {
                            id="name"
                            type="text"
                            className="my-1 block w-full"
-                           required
+
                            autoFocus
                            autoComplete="name"
-                           value={user.name}
+                           value={form.name}
                            name="name"
                            onChange={handleInputChange}
                        />
 
-                       <InputError className="my-1" message="" />
+                       { Object.keys(pageErrors).length > 0 ?
+                           <div>
+                               { Object.keys(pageErrors.errors).length > 0 ?
+                                   <div>{
+                                       pageErrors.errors.name ?
+                                           <InputError className="my-1" message={pageErrors.errors.name} />
+                                           : '' }
+                                   </div>
+                                   : '' }
+                           </div>
+                           : '' }
                    </div>
 
                    <div className="mt-4">
@@ -55,12 +105,22 @@ function Register() {
                            className="my-1 block w-full"
                            required
                            autoComplete="email"
-                           value={user.email}
+                           value={form.email}
                            name="email"
                            onChange={handleInputChange}
                        />
 
-                       <InputError className="my-1" message="" />
+                       { Object.keys(pageErrors).length > 0 ?
+                           <div>
+                               { Object.keys(pageErrors.errors).length > 0 ?
+                                   <div>{
+                                       pageErrors.errors.email ?
+                                           <InputError className="my-1" message={pageErrors.errors.email} />
+                                           : '' }
+                                   </div>
+                                   : '' }
+                           </div>
+                           : '' }
                    </div>
 
                    <div className="mt-4">
@@ -72,12 +132,22 @@ function Register() {
                            className="my-1 block w-full"
                            required
                            autoComplete="passowrd"
-                           value={user.password}
+                           value={form.password}
                            name="password"
                            onChange={handleInputChange}
                        />
 
-                       <InputError className="my-1" message="" />
+                       { Object.keys(pageErrors).length > 0 ?
+                           <div>
+                               { Object.keys(pageErrors.errors).length > 0 ?
+                                   <div>{
+                                       pageErrors.errors.password ?
+                                           <InputError className="my-1" message={pageErrors.errors.password} />
+                                           : '' }
+                                   </div>
+                                   : '' }
+                           </div>
+                           : '' }
                    </div>
 
                    <div className="mt-4">
@@ -89,12 +159,22 @@ function Register() {
                            className="my-1 block w-full"
                            required
                            autoComplete="password_confirmation"
-                           value={user.password_confirmation}
+                           value={form.password_confirmation}
                            name="password_confirmation"
                            onChange={handleInputChange}
                        />
 
-                       <InputError className="my-1" message="" />
+                       { Object.keys(pageErrors).length > 0 ?
+                           <div>
+                               { Object.keys(pageErrors.errors).length > 0 ?
+                                   <div>{
+                                       pageErrors.errors.password_confirmation ?
+                                           <InputError className="my-1" message={pageErrors.errors.password_confirmation} />
+                                           : '' }
+                                   </div>
+                                   : '' }
+                           </div>
+                           : '' }
                    </div>
 
                    <div className="flex items-center justify-end mt-4">
@@ -105,7 +185,7 @@ function Register() {
                            Already registered?
                        </Link>
 
-                       <PrimaryButton className="ml-4">
+                       <PrimaryButton type="submit" className="ml-4">
                            Register
                        </PrimaryButton>
                </div>

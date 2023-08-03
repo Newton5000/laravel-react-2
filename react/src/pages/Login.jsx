@@ -5,27 +5,68 @@ import TextInput from "../components/TextInput.jsx";
 import PrimaryButton from "../components/PrimaryButton.jsx";
 import {useState} from "react";
 import {Link} from "react-router-dom";
+import axios from "axios";
 
-function Login() {
-    const [user , setUser] = useState({
-        email: "",
-        password: "",
+function Login (){
+
+axios.defaults.withCredentials = true
+
+    const [form , setForm] = useState({
+        email: "botypi@mailinator.com",
+        password: "bootyclap69",
     })
+
+    const [user , setUser] = useState({})
+
+    const [pageErrors , setPageErrors] = useState({})
+
+    const [serverError , setServerError] = useState("")
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setUser((prevProps) => ({
+        setForm((prevProps) => ({
             ...prevProps,
             [name]: value
         }))
     }
-    const handleSubmit = (e) => {
+
+    const submit = async (e) => {
         e.preventDefault()
-        console.log(user)
+        let cookie = await axios.get(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`).catch((e) => {
+            setServerError( "something went wrong")
+        })
+
+        let login
+        if (cookie) {
+            login = await axios.post(`${import.meta.env.VITE_API_URL}/login`, {
+                email: form.email,
+                password: form.password,
+                remember: form.remember,
+            })
+                .catch((error) => {
+                    setPageErrors(error.response.data)
+                })
+        }
+
+        if (login) {
+            let {data} = await axios.get(`${import.meta.env.VITE_API_URL}/api/user`).catch((e) => {
+                setServerError("something went wrong")
+            })
+            setUser(data)
+        }
     }
+
     return (
         <>
             <GuestLayout>
-                <form onSubmit={handleSubmit}>
+                { user.name }
+                { user.id }
+                { user.email }
+                <div className="mb-4 font-medium text-sm text-red-600">
+                    { serverError }
+                </div>
+
+                <form onSubmit={submit}>
                     <div className="mt-4">
                         <InputLabel value="Email" />
 
@@ -36,12 +77,22 @@ function Login() {
                             required
                             autoFocus
                             autoComplete="email"
-                            value={user.email}
+                            value={form.email}
                             name="email"
                             onChange={handleInputChange}
                         />
 
-                        <InputError className="my-1" message="" />
+                        { Object.keys(pageErrors).length > 0 ?
+                            <div>
+                                { Object.keys(pageErrors.errors).length > 0 ?
+                                    <div>{
+                                        pageErrors.errors.email ?
+                                            <InputError className="my-1" message={pageErrors.errors.email} />
+                                        : '' }
+                                    </div>
+                                    : '' }
+                            </div>
+                        : '' }
                     </div>
 
                     <div className="mt-4">
@@ -53,12 +104,22 @@ function Login() {
                             className="my-1 block w-full"
                             required
                             autoComplete="password"
-                            value={user.password}
+                            value={form.password}
                             name="password"
                             onChange={handleInputChange}
                         />
 
-                        <InputError className="my-1" message="" />
+                        { Object.keys(pageErrors).length > 0 ?
+                            <div>
+                                { Object.keys(pageErrors.errors).length > 0 ?
+                                    <div>{
+                                        pageErrors.errors.password ?
+                                            <InputError className="my-1" message={pageErrors.errors.password} />
+                                            : '' }
+                                    </div>
+                                    : '' }
+                            </div>
+                            : '' }
                     </div>
 
                     <div className="flex items-center justify-end mt-4">

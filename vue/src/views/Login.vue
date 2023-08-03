@@ -11,53 +11,52 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true
 
-defineProps({
-    canResetPassword: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
-});
-
 const form = ref({
-    email: 'qybulame@mailinator.com',
-    password: 'jhugwdy7u7834',
+    email: "",
+    password: "",
     remember: false,
 });
 
 const user = ref({})
 
-const pageErrors = ref({})
-
-const form_is_processing = ref(false)
+const pageErrors = ref({
+    serverError: '',
+})
 
 const submit = async () => {
 
-    await axios.get(`${import.meta.env.VITE_PUBLIC_API_URL}/sanctum/csrf-cookie`).catch(e => e)
-
-    await axios.post(`${import.meta.env.VITE_PUBLIC_API_URL}/login`,{
-        email: form.value.email,
-        password: form.value.password,
-        remember: form.value.remember,
-    })
-        .catch((error) => {
-        pageErrors.value = error.response.data ?? pageErrors.value
+    let cookie = await axios.get(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`).catch((e) => {
+        pageErrors.value.serverError = "something went wrong"
     })
 
-    let { data } = await axios.get(`${import.meta.env.VITE_PUBLIC_API_URL}/api/user`).catch(e => e)
+    let login
+    if(cookie) {
+        login = await axios.post(`${import.meta.env.VITE_API_URL}/login`, {
+            email: form.value.email,
+            password: form.value.password,
+            remember: form.value.remember,
+        })
+            .catch((error) => {
+                pageErrors.value = error.response.data ?? pageErrors.value
+            })
+    }
 
-    user.value = data
+    if(login) {
+        let {data} = await axios.get(`${import.meta.env.VITE_API_URL}/api/user`).catch((e) => {
+            pageErrors.value.serverError = "something went wrong"
+        })
+        user.value = data
+    }
 };
 </script>
 
 <template>
     <GuestLayout>
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status}}
-        </div>
-
-        <pre>{{ user }}</pre>
+        <div v-if="Object.keys(pageErrors).length > 0" class="mb-4 font-medium text-sm text-red-600">
+                    <span v-if="pageErrors.serverError">
+                        <span>{{ pageErrors.serverError }}</span>
+                    </span>
+                </div>
 
         <form @submit.prevent="submit">
             <div class="mt-4">

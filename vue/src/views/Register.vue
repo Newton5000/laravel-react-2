@@ -6,6 +6,9 @@ import PrimaryButton from '@/components/PrimaryButton.vue';
 import TextInput from '@/components/TextInput.vue';
 import {RouterLink} from 'vue-router'
 import {ref} from "vue";
+import axios from "axios";
+
+axios.defaults.withCredentials = true
 
 const form = ref({
     name: '',
@@ -14,8 +17,37 @@ const form = ref({
     password_confirmation: '',
 });
 
-const submit = () => {
-    //
+const user = ref({})
+
+const pageErrors = ref({
+    serverError: '',
+})
+
+const submit = async () => {
+
+    let cookie = await axios.get(`${import.meta.env.VITE_API_URL}/sanctum/csrf-cookie`).catch((e) => {
+        pageErrors.value.serverError = "something went wrong"
+    })
+
+    let login
+    if(cookie) {
+        login = await axios.post(`${import.meta.env.VITE_API_URL}/register`, {
+            email: form.value.email,
+            password: form.value.password,
+            password_confirmation: form.value.password_confirmation,
+            name: form.value.name,
+        })
+            .catch((error) => {
+                pageErrors.value = error.response.data ?? pageErrors.value
+            })
+    }
+
+    if(login) {
+        let {data} = await axios.get(`${import.meta.env.VITE_API_URL}/api/user`).catch((e) => {
+            pageErrors.value.serverError = "something went wrong"
+        })
+        user.value = data
+    }
 };
 </script>
 
@@ -35,7 +67,13 @@ const submit = () => {
                     autocomplete="name"
                 />
 
-                <InputError class="mt-2" :message="form.name" />
+                <span v-if="Object.keys(pageErrors).length > 0">
+                    <span v-if="pageErrors.errors">
+                         <span v-if="pageErrors.errors.name">
+                        <InputError v-for="error in pageErrors.errors.name" class="mt-2" :message="error"/>
+                    </span>
+                    </span>
+                </span>
             </div>
 
             <div class="mt-4">
@@ -50,7 +88,13 @@ const submit = () => {
                     autocomplete="username"
                 />
 
-                <InputError class="mt-2" :message="form.email" />
+                <span v-if="Object.keys(pageErrors).length > 0">
+                    <span v-if="pageErrors.errors">
+                         <span v-if="pageErrors.errors.email">
+                        <InputError v-for="error in pageErrors.errors.email" class="mt-2" :message="error"/>
+                    </span>
+                    </span>
+                </span>
             </div>
 
             <div class="mt-4">
@@ -65,7 +109,13 @@ const submit = () => {
                     autocomplete="new-password"
                 />
 
-                <InputError class="mt-2" :message="form.password" />
+                <span v-if="Object.keys(pageErrors).length > 0">
+                    <span v-if="pageErrors.errors">
+                         <span v-if="pageErrors.errors.password">
+                        <InputError v-for="error in pageErrors.errors.password" class="mt-2" :message="error"/>
+                    </span>
+                    </span>
+                </span>
             </div>
 
             <div class="mt-4">
@@ -80,7 +130,13 @@ const submit = () => {
                     autocomplete="new-password"
                 />
 
-                <InputError class="mt-2" :message="form.password_confirmation" />
+                <span v-if="Object.keys(pageErrors).length > 0">
+                    <span v-if="pageErrors.errors">
+                         <span v-if="pageErrors.errors.password_confirmation">
+                        <InputError v-for="error in pageErrors.errors.password_confirmation" class="mt-2" :message="error"/>
+                    </span>
+                    </span>
+                </span>
             </div>
 
             <div class="flex items-center justify-end mt-4">
@@ -91,7 +147,7 @@ const submit = () => {
                     Already registered?
                 </RouterLink>
 
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton type="submit" class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Register
                 </PrimaryButton>
             </div>
